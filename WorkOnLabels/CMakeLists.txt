@@ -14,7 +14,7 @@ find_package(Boost COMPONENTS system filesystem REQUIRED)
 include_directories(./include)
 
 file(GLOB HEADERS "src/*/*.cpp" "src/*.cpp")
-file(GLOB SOURCES "src/*/*.h" "src/*.h")
+file(GLOB SOURCES "include/*/*.h" "include/*.h")
 
 add_executable(WorkOnLabels ${SOURCES} ${HEADERS} main.cpp)
 

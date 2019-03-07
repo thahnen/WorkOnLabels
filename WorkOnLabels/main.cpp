@@ -5,27 +5,18 @@
 #include <opencv4/opencv2/opencv.hpp>
 #include <nlohmann/json.hpp>
 
+#include "structures.h"
+
 using namespace std;
 using namespace cv;
 namespace fs = boost::filesystem;
 using json = nlohmann::json;
 
 
-typedef struct Polygon {
-    vector<Point> vertices;
-    Point middle;
-} Polygon;
-
-
 typedef struct FoundObject {
     vector<Point> contour;
     Point2f middle;
 } FoundObject;
-
-typedef struct ObjectGraph {
-    int index;
-    struct ObjectGraph* next;
-} ObjectGraph;
 
 
 int main() {
@@ -40,6 +31,7 @@ int main() {
      *
      *      => nur bei Labelbox noetig!
      *      => bisher werden nur die Geometrien der Objekte abgespeichert!
+     *      => ggf weitere Informationen noetig!
      *
      *******************************************************************************************************************/
 
@@ -51,36 +43,38 @@ int main() {
     file.close();
 
     // Liste aller Objekte, die im JSON sind (aus Labelbox)
-    vector<vector<Polygon>> objects_over_frames;
+    vector<vector<Polygon>> objects_over_frames;                        // nur noch hier bis alles fuer neues umbenannt!
+
+    // Liste aller Frames (hier aus JSON, spaeter aus Echtzeit-Daten)
+    vector<FrameData> frames;
 
     for (auto& frame : json_data) {
-        vector<Polygon> objects_in_frame;
+        vector<Polygon> objects_in_frame;                               // nur noch hier bis alles fuer neues umbenannt!
+        FrameData data_for_this_frame;
 
         for (auto& label : frame["Label"]["object"]) {
-            auto& geometry = label["geometry"];
             Polygon poly;
 
-            for (int i = 0; i < geometry.size(); i++) {
-                auto point = geometry[i];
+            for (auto& point : label["geometry"]) {
+                int x = point["x"];
+                int y = point["y"];
 
-                // Fuer Konturen/ Mittelpunkte darf kein Punkt am Rand liegen!
-                if (point["x"] >= 719) {
-                    point["x"] = 718;
-                } else if (point["x"] <= 0) {
-                    point["x"] = 1;
-                }
+                // Werte sollten vorher schon in (x: 0-719, y: 0-639) liegen
+                // Anpassung nur fuer Konturen und Mittelpunkte noetig!
+                if (x > 718) x = 718;
+                else if (x <= 0) x = 1;
 
-                if (point["y"] >= 639) {
-                    point["y"] = 638;
-                } else if (point["x"] <= 0) {
-                    point["x"] = 1;
-                }
+                if (y > 638) y = 638;
+                else if (y <= 0) y = 1;
 
-                poly.vertices.push_back(Point(point["x"], point["y"]));
+                poly.vertices.push_back(Point(x, y));
             }
             objects_in_frame.push_back(poly);
+            data_for_this_frame.found_polygons.push_back(poly);
+
         }
         objects_over_frames.push_back(objects_in_frame);
+        frames.push_back(data_for_this_frame);
     }
 
 
@@ -93,6 +87,33 @@ int main() {
      *      => nimmt die Geometrie-Daten von Labelbox, bei richtigen Werten muss das anders gemacht werden!
      *
      *******************************************************************************************************************/
+
+    for (FrameData frame : frames) {
+        Mat binary = zero.clone();
+
+        for (Polygon poly : frame.found_polygons) {
+            // &poly.vertices[0] -> veraendert Vector in Array!
+            fillConvexPoly(binary, &poly.vertices[0], poly.vertices.size(), Scalar(255));
+
+            Mat canny_output;
+            vector<vector<Point>> contours;
+            vector<Vec4i> hierarchy;
+
+            Canny(binary, canny_output, 50, 3*50, 5);
+            findContours(canny_output, contours, hierarchy, RETR_TREE, CHAIN_APPROX_SIMPLE, Point(0, 0));
+
+            vector<Moments> mu(contours.size());
+            for (int i = 0; i < contours.size(); i++) {
+                mu[i] = moments(contours[i], false);
+            }
+
+            vector<Point2f> mc(contours.size());
+            for (int i = 0; i < contours.size(); i++) {
+                mc[i] = Point2f(mu[i].m10/mu[i].m00, mu[i].m01/mu[i].m00);
+                poly.center = mc[i];                                        // sollte immer auf letztes Element gesetzt werden!
+            }
+        }
+    }
 
     // Liste aller Frames mit jeweils aller Objekte und deren Eigenschaften
     vector<vector<FoundObject>> gefundene_objekte;
@@ -123,7 +144,7 @@ int main() {
             vector<int> fallen_lassen;
             for (int i = 0; i < contours.size(); i++) {
                 mc[i] = Point2f(mu[i].m10/mu[i].m00, mu[i].m01/mu[i].m00);
-                poly.middle = mc[i];
+                poly.center = mc[i];
 
                 // Hier ueberpruefen, ob der Mittelpunkt am Rand liegt, dann wird das fallen gelassen!
                 if (mc[i].x < 10 || mc[i].x > 710 || mc[i].y < 0 || mc[i].y > 630) {
@@ -131,7 +152,7 @@ int main() {
                 }
             }
 
-            // Fuer spaetere Weiterarbeit die Objekte abspeichern!
+            // Fuer spaetere Weiterarbeit die Objekte abspeichern!          // sind hier nicht viele Kopien von demselben drin?
             for (int i = 0; i < contours.size(); i++) {
                 objekte_in_diesem_frame.push_back({
                     contours[i], mc[i]
@@ -171,6 +192,8 @@ int main() {
     vector<vector<int>> same_objects;
 
     for (vector<FoundObject> frame : gefundene_objekte) {
+        // Fuer jedes Frame gibt es eine Liste von Objekten!
+
 
     }
 }
