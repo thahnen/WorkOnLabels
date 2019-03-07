@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <ctime>
 
 #include <boost/filesystem.hpp>
 #include <opencv4/opencv2/opencv.hpp>
@@ -7,6 +8,7 @@
 
 #include "structures.h"
 #include "filehandler.h"
+#include "util.h"
 
 using namespace std;
 using namespace cv;
@@ -17,7 +19,7 @@ using json = nlohmann::json;
 int main() {
     Mat zero = Mat::zeros(Size(720, 640), CV_8UC1);
     Mat json_geometrie = zero.clone();
-    
+
     // Liste aller Frames (hier aus JSON, spaeter aus Echtzeit-Daten)
     vector<FrameData> frames;
 
@@ -33,9 +35,14 @@ int main() {
      *
      *******************************************************************************************************************/
 
+    clock_t begin = clock();
+
+
     //frames = readJSON("../media/DVS_HGH 01.min.json");    // hier klappt es noch nicht: Datensatz aber auch nicht wie 36!
     frames = readJSON("../media/DVS_HGH 36.min.json");
 
+
+    cout << "Verbrauchte Zeit zum Einlesen der Daten: " << (double(clock() - begin) / CLOCKS_PER_SEC) << endl;
 
     /*******************************************************************************************************************
      *
@@ -47,9 +54,12 @@ int main() {
      *
      *******************************************************************************************************************/
 
+    begin = clock();
+
+
     unsigned int index = 0;
 
-    // Hier MUSS eine Forward-Reference hin, da sonst in "frame" nicht geschrieben werden kann, da nur Kopie!
+    // Hier MUSS eine Forward-Reference hin, sonst kann in "frame" nicht geschrieben werden, da nur Kopie!
     for (FrameData& frame : frames) {
         Mat binary = zero.clone();
 
@@ -143,6 +153,7 @@ int main() {
     }
 
 
+    /*
     // Hier keine Forward Reference, da die Daten nicht bearbeitet werden sollen!
     for (FrameData frame : frames) {
         Mat data = zero.clone();
@@ -157,7 +168,10 @@ int main() {
         imshow("Nur Mittelpunkte", points);
         waitKey(0);
     }
+     */
 
+
+    cout << "Verbrauchte Zeit Zuordnng Frames -> Polygone -> Mittelpunkt: " << (double(clock() - begin) / CLOCKS_PER_SEC) << endl;
 
     /*******************************************************************************************************************
      *
@@ -165,16 +179,111 @@ int main() {
      *      ========================================
      *
      *      1) In jedem Frame (bis auf erstem):
-     *      => für jedes Polygon:
-     *          => war einer der Polygone aus vorherigem Frame
+     *      => für jedes bestehende Node:
+     *          => war das Polygon im Node aus vorherigem Frame "Vorgaenger"?
+     *              => NEIN: als neuer Pfad hinzufuegen
+     *              => JA: war es nur einer?
+     *                  => JA: an alten anheften!
+     *                  => NEIN: alle zusammenfassen!
+     *
+     *      2) Fuer ersten Frame:
+     *      => einfach alle als Node hinzufuegen!
      *
      *******************************************************************************************************************/
 
-    vector<PathNode> different_paths;
+    begin = clock();
 
+
+    vector<PathNode> different_paths;
     index = 0;
+
     // Hier keine Forward Reference, da die Daten nicht bearbeitet werden sollen!
     for (FrameData frame : frames) {
-        //
+        if (index != 0) {
+            for (Polygon poly : frame.found_polygons) {
+                for (int i = 0; i < different_paths.size(); i++) {
+                    // Zeiger auf das Element, damit es direkt bearbeitet und nicht kopiert wird!
+                    PathNode* vorhanden = &different_paths[i];
+
+                    // Die letzten PathNodes von diesem Element
+                    vector<PathNode*> letzte = getLastPathNodes(vorhanden, vorhanden->timestamp);
+
+                    // Alle letzten ueberpruefen
+                    for (PathNode* letzter : letzte) {
+                        // 1) Passt der Timestamp
+                        if (letzter->timestamp != index-1) {
+                            std::remove(letzte.begin(), letzte.end(), letzter);
+                            continue;
+                        }
+
+                        // 2) Liegt der Mittelpunkt des vorherigen Polygon um neuen Mittelpunkt herum
+                        if (letzter->objekt.center.x >= poly.center.x-5 && letzter->objekt.center.x <= poly.center.x+5
+                            && letzter->objekt.center.y >= poly.center.y-5 && letzter->objekt.center.y <= poly.center.y+5) {
+                            //
+                        }
+                    }
+
+                    // 1) Keine der vorhandenen war Vorgänger
+                    if (letzte.size() == 0) {
+                        PathNode new_node;
+                        new_node.typ = BEHIND_0;
+                        new_node.timestamp = index;
+                        new_node.objekt = poly;
+                        different_paths.push_back(new_node);
+                    }
+
+                    // 2) Mehrere (auch nur einer) war Vorgänger
+                    else {
+                        for (PathNode* letzter : letzte) {
+                            //
+                        }
+                    }
+
+
+                    // TODO: das hier drunter kommt weg!
+                    // 1) Liegt der Mittelpunkt des vorherigen Polygon um neuen Mittelpunkt herum
+                    if (vorhanden->objekt.center.x >= poly.center.x-5 && vorhanden->objekt.center.x <= poly.center.x+5
+                        && vorhanden->objekt.center.y >= poly.center.y-5 && vorhanden->objekt.center.y <= poly.center.y+5) {
+
+                        // Neues PathNode-Objekt erstellen
+                        PathNode added_node;
+                        added_node.typ = BEHIND_0;
+                        added_node.timestamp = index;
+                        added_node.objekt = poly;
+
+                        // Vorheriges aendern
+                        if (vorhanden->nachfolger.size() > 1) {
+                            vorhanden->typ = BEHIND_N;
+                        } else {
+                            vorhanden->typ = BEHIND_1;
+                        }
+                        vorhanden->nachfolger.push_back(&added_node);
+
+                        //
+                        break;
+                    }
+
+                    // 2) Keiner der vorherigen
+                    else {
+                        //
+                    }
+                }
+            }
+        } else {
+            for (Polygon poly : frame.found_polygons) {
+                PathNode new_node;
+                new_node.typ = BEHIND_0;
+                new_node.timestamp = index;
+                new_node.objekt = poly;
+                different_paths.push_back(new_node);
+            }
+
+            // Jetzt gibt es initiale Pfade!
+        }
+
+        index++;
     }
+
+
+    cout << "Verbrauchte Zeit Erstellung grundlegende Pfade: " << (double(clock() - begin) / CLOCKS_PER_SEC) << endl;
 }

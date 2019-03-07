@@ -47,15 +47,9 @@ typedef struct FrameData {
  *
  ***********************************************************************************************************************/
 typedef enum NodeType : int {
-    BEFORE_0_BEHIND_0 = 0,      // 0 vorher da, 0 danach da     -> ???
-    BEFORE_0_BEHIND_1 = 1,      // 0 vorher da, 1 danach da     -> Objekt hinzugekommen
-    BEFORE_0_BEHIND_N = 2,      // 0 vorher da, >1 danach da    -> Objekte hinzugekommen und aufgesplittet in mehrere
-    BEFORE_1_BEHIND_0 = 3,      // 1 vorher da, 0 danach da     -> Objekt verschwunden
-    BEFORE_1_BEHIND_1 = 4,      // 1 vorher da, 1 danach da     -> Objekt weiterhin vorhanden
-    BEFORE_1_BEHIND_N = 5,      // 1 vorher da, >1 danach da    -> Objekt aufgesplittet in mehrere
-    BEFORE_N_BEHIND_0 = 6,      // >1 vorher da, 0 danach da    -> Mehrere Objekte zusammengekommen und verschwunden
-    BEFORE_N_BEHIND_1 = 7,      // >1 vorher da, 1 danach da    -> Mehrere Objekte zusammengekommen
-    BEFORE_N_BEHIND_N = 8,      // >1 vorher da, >1 danach da   -> Mehrere Objekte zusammengekommen und aufgesplittet in mehrere
+    BEHIND_0 = 0,       // 0 danach da      -> Objekt hinzugekommen ODER verschwunden
+    BEHIND_1 = 1,       // 1 danach da      -> Objekt weitergefuert
+    BEHIND_N = 2,       // >1 danach da     -> Objekte aufgesplittet in mehrere
 } NodeType;
 
 
@@ -72,10 +66,10 @@ typedef enum NodeType : int {
  *
  ***********************************************************************************************************************/
 typedef struct PathNode {
-    std::vector<struct PathNode*> vorgaenger;   // Alle Vorgaenger-Nodes 0-n moeglich!
-    NodeType typ;                               // Dient zur Label-Vergabe
-    Polygon objekt;                             // In aktuellem Frame erkanntes Objekt mit Eigenschaften!
-    std::vector<struct PathNode*> nachfolger;   // Alle Nachfolger-Nodes 0-n moeglich!
+    NodeType typ;                                   // Dient zur Label-Vergabe
+    int timestamp;                                  // Der Zeitstempel, damit nachher in Funktion ueberfuehrbar
+    Polygon objekt;                                 // In aktuellem Frame erkanntes Objekt mit Eigenschaften!
+    std::vector<struct PathNode*> nachfolger;       // Alle Nachfolger-Nodes 0-n moeglich!
 } PathNode;
 
 
