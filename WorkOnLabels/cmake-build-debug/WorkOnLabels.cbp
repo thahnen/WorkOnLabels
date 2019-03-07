@@ -8,103 +8,105 @@
 		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\..\;CMake Files\..\..\..\..\..\usr\;CMake Files\..\..\..\..\..\usr\local\;CMake Files\..\..\..\..\..\usr\local\lib\;CMake Files\..\..\..\..\..\usr\local\lib\cmake\;CMake Files\..\..\..\..\..\usr\local\lib\cmake\opencv4\;"/>
 		<Build>
 			<Target title="all">
-				<Option working_dir="/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug"/>
+				<Option working_dir="/home/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="rebuild_cache">
-				<Option working_dir="/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug"/>
+				<Option working_dir="/home/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-				</MakeCommands>
-			</Target>
-			<Target title="edit_cache">
-				<Option working_dir="/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug"/>
-				<Option type="4"/>
-				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="WorkOnLabels">
-				<Option output="/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/WorkOnLabels" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug"/>
+				<Option output="/home/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/WorkOnLabels" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/./include"/>
+					<Add directory="/home/thahnen/GitHub/WorkOnLabels/WorkOnLabels/./include"/>
 					<Add directory="/usr/local/include/opencv4"/>
-					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
 					<Add directory="/usr/local/include"/>
-					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/10.0.0/include"/>
-					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
 					<Add directory="/usr/include"/>
-					<Add directory="/System/Library/Frameworks"/>
-					<Add directory="/Library/Frameworks"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 WorkOnLabels"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 WorkOnLabels"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="WorkOnLabels/fast">
-				<Option output="/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/WorkOnLabels" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug"/>
+				<Option output="/home/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/WorkOnLabels" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/./include"/>
+					<Add directory="/home/thahnen/GitHub/WorkOnLabels/WorkOnLabels/./include"/>
 					<Add directory="/usr/local/include/opencv4"/>
-					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
 					<Add directory="/usr/local/include"/>
-					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/10.0.0/include"/>
-					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
 					<Add directory="/usr/include"/>
-					<Add directory="/System/Library/Frameworks"/>
-					<Add directory="/Library/Frameworks"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 WorkOnLabels/fast"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 WorkOnLabels/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/thahnen/GitHub/WorkOnLabels/WorkOnLabels/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/include/structures.h">
+		<Unit filename="/home/thahnen/GitHub/WorkOnLabels/WorkOnLabels/include/structures.h">
 			<Option target="WorkOnLabels"/>
 		</Unit>
-		<Unit filename="/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/main.cpp">
+		<Unit filename="/home/thahnen/GitHub/WorkOnLabels/WorkOnLabels/main.cpp">
 			<Option target="WorkOnLabels"/>
 		</Unit>
-		<Unit filename="/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/CMakeLists.txt">
+		<Unit filename="/home/thahnen/GitHub/WorkOnLabels/WorkOnLabels/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
-		<Unit filename="/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/../../../../../usr/local/lib/cmake/opencv4/OpenCVConfig-version.cmake">
+		<Unit filename="/home/thahnen/GitHub/WorkOnLabels/WorkOnLabels/../../../../../usr/local/lib/cmake/opencv4/OpenCVConfig-version.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\local\lib\cmake\opencv4\"/>
 		</Unit>
-		<Unit filename="/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/../../../../../usr/local/lib/cmake/opencv4/OpenCVConfig.cmake">
+		<Unit filename="/home/thahnen/GitHub/WorkOnLabels/WorkOnLabels/../../../../../usr/local/lib/cmake/opencv4/OpenCVConfig.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\local\lib\cmake\opencv4\"/>
 		</Unit>
-		<Unit filename="/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/../../../../../usr/local/lib/cmake/opencv4/OpenCVModules-release.cmake">
+		<Unit filename="/home/thahnen/GitHub/WorkOnLabels/WorkOnLabels/../../../../../usr/local/lib/cmake/opencv4/OpenCVModules-release.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\local\lib\cmake\opencv4\"/>
 		</Unit>
-		<Unit filename="/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/../../../../../usr/local/lib/cmake/opencv4/OpenCVModules.cmake">
+		<Unit filename="/home/thahnen/GitHub/WorkOnLabels/WorkOnLabels/../../../../../usr/local/lib/cmake/opencv4/OpenCVModules.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\local\lib\cmake\opencv4\"/>
 		</Unit>
 	</Project>
