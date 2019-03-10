@@ -8,7 +8,7 @@
 
 #include "structures.h"
 #include "filehandler.h"
-#include "util.h"
+#include "PathNode.h"
 
 using namespace std;
 using namespace cv;
@@ -167,8 +167,7 @@ int main() {
         imshow("Polygone mit Mittelpunkt", data);
         imshow("Nur Mittelpunkte", points);
         waitKey(0);
-    }
-     */
+    }*/
 
 
     cout << "Verbrauchte Zeit Zuordnng Frames -> Polygone -> Mittelpunkt: " << (double(clock() - begin) / CLOCKS_PER_SEC) << endl;
@@ -201,88 +200,72 @@ int main() {
     for (FrameData frame : frames) {
         if (index != 0) {
             for (Polygon poly : frame.found_polygons) {
+                vector<int> mgl_vorgaenger;
+
                 for (int i = 0; i < different_paths.size(); i++) {
-                    // Zeiger auf das Element, damit es direkt bearbeitet und nicht kopiert wird!
+                    // Zeiger, da hier das Element (noch) nicht veraendert wird
                     PathNode* vorhanden = &different_paths[i];
 
-                    // Die letzten PathNodes von diesem Element
-                    vector<PathNode*> letzte = getLastPathNodes(vorhanden, vorhanden->timestamp);
-
-                    // Alle letzten ueberpruefen
-                    for (PathNode* letzter : letzte) {
-                        // 1) Passt der Timestamp
-                        if (letzter->timestamp != index-1) {
-                            std::remove(letzte.begin(), letzte.end(), letzter);
-                            continue;
-                        }
-
-                        // 2) Liegt der Mittelpunkt des vorherigen Polygon um neuen Mittelpunkt herum
-                        if (letzter->objekt.center.x >= poly.center.x-5 && letzter->objekt.center.x <= poly.center.x+5
-                            && letzter->objekt.center.y >= poly.center.y-5 && letzter->objekt.center.y <= poly.center.y+5) {
-                            //
-                        }
-                    }
-
-                    // 1) Keine der vorhandenen war Vorgänger
-                    if (letzte.size() == 0) {
-                        PathNode new_node;
-                        new_node.typ = BEHIND_0;
-                        new_node.timestamp = index;
-                        new_node.objekt = poly;
-                        different_paths.push_back(new_node);
-                    }
-
-                    // 2) Mehrere (auch nur einer) war Vorgänger
-                    else {
-                        for (PathNode* letzter : letzte) {
-                            //
-                        }
-                    }
+                    // TODO: entweder wird das in Zukunft noch geaendert oder danach beim zusammenfuegen der Pfade!
+                    // Wenn der bestehende Pfad nicht auch im letzten Frame war, dann wird er nicht beachtet!
+                    if (vorhanden->timestamp < index-1) continue;
 
 
-                    // TODO: das hier drunter kommt weg!
                     // 1) Liegt der Mittelpunkt des vorherigen Polygon um neuen Mittelpunkt herum
-                    if (vorhanden->objekt.center.x >= poly.center.x-5 && vorhanden->objekt.center.x <= poly.center.x+5
-                        && vorhanden->objekt.center.y >= poly.center.y-5 && vorhanden->objekt.center.y <= poly.center.y+5) {
-
-                        // Neues PathNode-Objekt erstellen
-                        PathNode added_node;
-                        added_node.typ = BEHIND_0;
-                        added_node.timestamp = index;
-                        added_node.objekt = poly;
-
-                        // Vorheriges aendern
-                        if (vorhanden->nachfolger.size() > 1) {
-                            vorhanden->typ = BEHIND_N;
-                        } else {
-                            vorhanden->typ = BEHIND_1;
-                        }
-                        vorhanden->nachfolger.push_back(&added_node);
-
-                        //
-                        break;
+                    if (vorhanden->objekt.center.x >= poly.center.x-10 && vorhanden->objekt.center.x <= poly.center.x+10
+                        && vorhanden->objekt.center.y >= poly.center.y-10 && vorhanden->objekt.center.y <= poly.center.y+10) {
+                        mgl_vorgaenger.push_back(i);
                     }
 
-                    // 2) Keiner der vorherigen
+                    // 2) irgendwas anderes
                     else {
                         //
                     }
                 }
+
+                PathNode new_node(BEHIND_0, index, poly);
+
+                if (mgl_vorgaenger.size() > 0) {
+                    for (int path_index : mgl_vorgaenger) {
+                        NodeType old_type = different_paths[path_index].typ;
+                        if (old_type == BEHIND_0) different_paths[path_index].typ = BEHIND_1;
+                        else if (old_type == BEHIND_1) different_paths[path_index].typ = BEHIND_N;
+
+                        // Hier soll es kopiert werden!
+                        PathNode old = different_paths[path_index];
+                        new_node.vorgaenger.push_back(different_paths[path_index]);
+                    }
+                }
+
+                different_paths.push_back(new_node);
             }
         } else {
             for (Polygon poly : frame.found_polygons) {
-                PathNode new_node;
-                new_node.typ = BEHIND_0;
-                new_node.timestamp = index;
-                new_node.objekt = poly;
-                different_paths.push_back(new_node);
+                different_paths.push_back(PathNode(BEHIND_0, index, poly));
             }
-
-            // Jetzt gibt es initiale Pfade!
         }
 
-        index++;
+        // Hier alle PathNodes loeschen, die in einem der folgenden PathNodes vorkommen!
+        different_paths.erase(remove_if(
+                different_paths.begin(),
+                different_paths.end(),
+                [&](PathNode elem) {
+                    int timestamp = elem.timestamp;
+
+                    // Testen, ob alle Element danach einen höheren Timestamp haben
+                    for (unsigned int i = find(different_paths.begin(), different_paths.end(), elem)-different_paths.begin()+1; i < different_paths.size(); i++) {
+                        // Element aus folgendem Frame? Weil nur dann geht das ^^
+                        if ((different_paths[i].timestamp == timestamp+1) && (different_paths[i].vorgaenger.size() > 0)) {
+                            // Element koennte das gerade zu testende Objekt beinhalten!
+                            // ...
+                        }
+                    }
+                }
+                ),different_paths.end());
     }
+
+
+    // Jetzt alle Pfade nochmal durchgehen und die, die Teile von anderen sind, loeschen! (quasi ausmisten -> ggf nach jedem Frame schon)
 
 
     cout << "Verbrauchte Zeit Erstellung grundlegende Pfade: " << (double(clock() - begin) / CLOCKS_PER_SEC) << endl;

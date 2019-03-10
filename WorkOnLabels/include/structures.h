@@ -24,6 +24,11 @@ typedef struct Polygon {
     // ...
 } Polygon;
 
+inline bool operator==(const Polygon& poly1, const Polygon& poly2) {
+    // Test beider Vektoren sollte so gehen (werden ja eigentlich nicht umgestellt beim kopieren!)
+    return ((poly1.center == poly2.center) && (poly1.vertices == poly2.vertices));
+}
+
 
 /***********************************************************************************************************************
  *
@@ -51,26 +56,6 @@ typedef enum NodeType : int {
     BEHIND_1 = 1,       // 1 danach da      -> Objekt weitergefuert
     BEHIND_N = 2,       // >1 danach da     -> Objekte aufgesplittet in mehrere
 } NodeType;
-
-
-/***********************************************************************************************************************
- *
- *      Damit lassen sich Pfade ueber Frames hinweg zusammenfassen (als erster Schritt!)
- *
- *      1) Wenn jeder PathNode fuer
- *      - jeden Vorgaenger nur einen Vorgagener
- *      - jeden Nachfolger nur einen Nachfolger
- *      hat, dann bekommt es ein eindeutiges Label fuer ganze Zeit!
- *
- *      2) Wenn nicht, dann muss evaluiert werden anhand NodeType!
- *
- ***********************************************************************************************************************/
-typedef struct PathNode {
-    NodeType typ;                                   // Dient zur Label-Vergabe
-    int timestamp;                                  // Der Zeitstempel, damit nachher in Funktion ueberfuehrbar
-    Polygon objekt;                                 // In aktuellem Frame erkanntes Objekt mit Eigenschaften!
-    std::vector<struct PathNode*> nachfolger;       // Alle Nachfolger-Nodes 0-n moeglich!
-} PathNode;
 
 
 #endif //WORKONLABELS_STRUCTURES_H
