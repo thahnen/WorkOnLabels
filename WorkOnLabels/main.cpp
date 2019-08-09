@@ -63,10 +63,13 @@ int main() {
     for (FrameData& frame : frames) {
         Mat binary = zero.clone();
 
+
+        // TODO: Keine Konturen erkennen muessen, an Vertices der Polygone Momente und Mittelpunkte bilden!
+
+
         for (Polygon poly : frame.found_polygons) {
             fillConvexPoly(binary, &poly.vertices[0], poly.vertices.size(), Scalar(255));
         }
-
 
         // Dient nur dazu, Konturen zu finden, um daraus die Mittelpunkte zu errechnen
         Mat canny_output;
@@ -152,8 +155,6 @@ int main() {
         index++;
     }
 
-
-    /*
     // Hier keine Forward Reference, da die Daten nicht bearbeitet werden sollen!
     for (FrameData frame : frames) {
         Mat data = zero.clone();
@@ -167,7 +168,7 @@ int main() {
         imshow("Polygone mit Mittelpunkt", data);
         imshow("Nur Mittelpunkte", points);
         waitKey(0);
-    }*/
+    }
 
 
     cout << "Verbrauchte Zeit Zuordnng Frames -> Polygone -> Mittelpunkt: " << (double(clock() - begin) / CLOCKS_PER_SEC) << endl;
@@ -211,9 +212,10 @@ int main() {
                     if (vorhanden->timestamp < index-1) continue;
 
 
+                    int ABSTAND = 10;
                     // 1) Liegt der Mittelpunkt des vorherigen Polygon um neuen Mittelpunkt herum
-                    if (vorhanden->objekt.center.x >= poly.center.x-10 && vorhanden->objekt.center.x <= poly.center.x+10
-                        && vorhanden->objekt.center.y >= poly.center.y-10 && vorhanden->objekt.center.y <= poly.center.y+10) {
+                    if (vorhanden->objekt.center.x >= poly.center.x-ABSTAND && vorhanden->objekt.center.x <= poly.center.x+ABSTAND
+                        && vorhanden->objekt.center.y >= poly.center.y-ABSTAND && vorhanden->objekt.center.y <= poly.center.y+ABSTAND) {
                         mgl_vorgaenger.push_back(i);
                     }
 
@@ -226,6 +228,7 @@ int main() {
                 PathNode new_node(BEHIND_0, index, poly);
 
                 if (mgl_vorgaenger.size() > 0) {
+                    if (mgl_vorgaenger.size() > 1) cout << "Frame: " << index << " hat Polygon mit mehr als einem Vorgaenger!" << endl;
                     for (int path_index : mgl_vorgaenger) {
                         NodeType old_type = different_paths[path_index].typ;
                         if (old_type == BEHIND_0) different_paths[path_index].typ = BEHIND_1;
@@ -245,7 +248,7 @@ int main() {
             }
         }
 
-        // Hier alle PathNodes loeschen, die in einem der folgenden PathNodes vorkommen!
+        // Jetzt alle Pfade nochmal durchgehen und die, die Teile von anderen sind, loeschen!
         different_paths.erase(remove_if(
                 different_paths.begin(),
                 different_paths.end(),
@@ -257,15 +260,18 @@ int main() {
                         // Element aus folgendem Frame? Weil nur dann geht das ^^
                         if ((different_paths[i].timestamp == timestamp+1) && (different_paths[i].vorgaenger.size() > 0)) {
                             // Element koennte das gerade zu testende Objekt beinhalten!
-                            // ...
+                            for (PathNode vorgaenger : different_paths[i].vorgaenger) {
+                                if (elem == vorgaenger) return true;
+                            }
                         }
                     }
+
+                    return false;
                 }
                 ),different_paths.end());
+
+        index++;
     }
-
-
-    // Jetzt alle Pfade nochmal durchgehen und die, die Teile von anderen sind, loeschen! (quasi ausmisten -> ggf nach jedem Frame schon)
 
 
     cout << "Verbrauchte Zeit Erstellung grundlegende Pfade: " << (double(clock() - begin) / CLOCKS_PER_SEC) << endl;

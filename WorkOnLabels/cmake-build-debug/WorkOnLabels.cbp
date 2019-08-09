@@ -95,9 +95,6 @@
 		<Unit filename="/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/include/structures.h">
 			<Option target="WorkOnLabels"/>
 		</Unit>
-		<Unit filename="/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/include/util.h">
-			<Option target="WorkOnLabels"/>
-		</Unit>
 		<Unit filename="/Users/thahnen/GitHub/WorkOnLabels/WorkOnLabels/main.cpp">
 			<Option target="WorkOnLabels"/>
 		</Unit>

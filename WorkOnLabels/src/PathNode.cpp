@@ -11,8 +11,8 @@ PathNode::PathNode(NodeType typ, int timestamp, Polygon objekt) {
     this->objekt = objekt;
 }
 
-bool PathNode::operator==(PathNode &node) {
+bool PathNode::operator==(const PathNode &node) {
     // GGF muss hier geschaut werden, wenn die Vektoren nicht umgestellt sind oder so
     return ((this->typ == node.typ) && (this->timestamp == node.timestamp)
-            && (this->objekt == node.objekt) && (this->vorgaenger == node.vorgaenger));
+        && (this->objekt == node.objekt) && (this->vorgaenger.size() == node.vorgaenger.size()));
 }

@@ -27,7 +27,7 @@ public:
     PathNode(NodeType typ, int timestamp, Polygon objekt);
     ~PathNode() = default;
 
-    bool operator==(PathNode& node);
+    bool operator==(const PathNode& node);
 
     std::vector<PathNode> vorgaenger;
     NodeType typ;
